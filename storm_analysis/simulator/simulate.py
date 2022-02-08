@@ -100,13 +100,15 @@ class Simulate(object):
             print("Warning! No localizations input HDF5 file!")
 
         out_fname_base = dax_file[:-4]
-        h5_data_out = saH5Py.SAH5Py(filename = out_fname_base + "_ref.hdf5",
+
+        ## file name modified ... by ioah(22.02.08.)
+        h5_data_out = saH5Py.SAH5Py(filename = "ref_" + out_fname_base + ".hdf5",
                                     is_existing = False,
                                     overwrite = True)
         h5_data_out.setMovieInformation(self.x_size, self.y_size, n_frames, "")
         
-        sim_settings = open(out_fname_base + "_sim_params.txt", "w")
-
+        sim_settings = open("sim_params_" + out_fname_base + ".txt", "w")
+        
         #
         # Create the user-specified class instances that will do
         # most of the actual work of the simulation.
