@@ -83,7 +83,7 @@ class SlopedBackground(Background):
 class SawtoothBackground(Background):
 
     def __init__(self, sim_fp, x_size, y_size, h5_data, photons=100,offset=0,setted_bg=0,tolerance=10,period=255):
-        super(SlopedBackground, self).__init__(sim_fp, x_size, y_size, h5_data)
+        super(SawtoothBackground, self).__init__(sim_fp, x_size, y_size, h5_data)
         self.saveJSON({"background" : {"class" : "SlopedBackground",
                                        "offset" : str(offset),
                                        "slope" : str(slope)}})    
