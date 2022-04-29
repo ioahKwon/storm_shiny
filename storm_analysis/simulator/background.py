@@ -10,7 +10,11 @@ import random
 
 import storm_analysis.simulator.draw_gaussians_c as dg
 import storm_analysis.simulator.simbase as simbase
+##################### (modified in 220429)
 
+from scipy import signal
+import matplotlib.pyplot as plt
+#####################
 
 class Background(simbase.SimBase):
     """
@@ -75,7 +79,39 @@ class SlopedBackground(Background):
         for i in range(y_size):
             self.bg_image[:,i] += slope_arr
             
-    
+
+class SawtoothBackground(Background):
+
+    def __init__(self, sim_fp, x_size, y_size, h5_data, photons=100,offset=0,setted_bg=0,tolerance=10,period=255):
+        super(SlopedBackground, self).__init__(sim_fp, x_size, y_size, h5_data)
+        self.saveJSON({"background" : {"class" : "SlopedBackground",
+                                       "offset" : str(offset),
+                                       "slope" : str(slope)}})    
+        self.bg_image = numpy.zeros((x_size, y_size)) + offset
+        time = numpy.linspace(0,1,period)
+        sig_amp = signal.sawtooth(2*numpy.pi*5*time)
+        sig_amp = numpy.ones(x_size) * sig_amp * photons
+        sig_arr = sig_amp
+
+        ### root mean square condition ###
+        ms = 0
+        cnt = 0
+
+        for i in bg_image:
+            for j in i:
+                ms = ms + j**2
+                cnt += 1
+        ms = numpy.sqrt(ms/cnt)
+        print('RMS(root mean square) : ', ms)
+
+        if abs(ms-setted_bg) > tolerance:
+            print("RMS value is out of range(bg range). Try again")
+        else:
+            for i in range(x_size):
+                self.bg_image[:,i] += sig_arr
+        #############
+                
+
 class UniformBackground(Background):
 
     def __init__(self, sim_fp, x_size, y_size, h5_data, photons = 100):
