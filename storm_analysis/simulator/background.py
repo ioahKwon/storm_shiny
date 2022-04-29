@@ -82,12 +82,12 @@ class SlopedBackground(Background):
 
 class SawtoothBackground(Background):
 
-    def __init__(self, sim_fp, x_size, y_size, h5_data, photons=100,offset=0,setted_bg=0,tolerance=10,period=255):
+    def __init__(self, sim_fp, x_size, y_size, h5_data, photons=100,offset=0,setted_bg=0,tolerance=10,period=256):
         super(SawtoothBackground, self).__init__(sim_fp, x_size, y_size, h5_data)
         
         self.bg_image = numpy.zeros((x_size, y_size)) + offset
-        time = numpy.linspace(0,1,period)
-        sig_amp = signal.sawtooth(2*numpy.pi*5*time)
+        time = numpy.linspace(0,1,x_size)
+        sig_amp = signal.sawtooth(2*numpy.pi*period*time)
         sig_amp = numpy.ones(x_size) * sig_amp * photons
         sig_arr = sig_amp
 
