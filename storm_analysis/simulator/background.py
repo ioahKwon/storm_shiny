@@ -84,9 +84,7 @@ class SawtoothBackground(Background):
 
     def __init__(self, sim_fp, x_size, y_size, h5_data, photons=100,offset=0,setted_bg=0,tolerance=10,period=255):
         super(SawtoothBackground, self).__init__(sim_fp, x_size, y_size, h5_data)
-        self.saveJSON({"background" : {"class" : "SlopedBackground",
-                                       "offset" : str(offset),
-                                       "slope" : str(slope)}})    
+        
         self.bg_image = numpy.zeros((x_size, y_size)) + offset
         time = numpy.linspace(0,1,period)
         sig_amp = signal.sawtooth(2*numpy.pi*5*time)
@@ -97,11 +95,15 @@ class SawtoothBackground(Background):
         ms = 0
         cnt = 0
 
-        for i in bg_image:
+        for i in self.bg_image:
             for j in i:
                 ms = ms + j**2
                 cnt += 1
         ms = numpy.sqrt(ms/cnt)
+        
+        self.saveJSON({"background" : {"class" : "SawtoothBackground",
+                                       "rms_bg" : str(ms)}})
+        
         print('RMS(root mean square) : ', ms)
 
         if abs(ms-setted_bg) > tolerance:
