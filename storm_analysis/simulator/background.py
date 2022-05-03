@@ -11,7 +11,8 @@ import random
 import storm_analysis.simulator.draw_gaussians_c as dg
 import storm_analysis.simulator.simbase as simbase
 ##################### (modified in 220429)
-
+from scipy.stats import poisson
+from scipy.io import loadmat
 from scipy import signal
 import matplotlib.pyplot as plt
 #####################
@@ -113,7 +114,19 @@ class SawtoothBackground(Background):
                 self.bg_image[:,i] += sig_arr
         #############
                 
+class RandomNoiseBackground(Background):
 
+    def __init__(self, sim_fp, x_size, y_size, h5_data, sigma=100, offset = 0.0):
+        super(RandomNoiseBackground, self).__init__(sim_fp, x_size, y_size, h5_data)
+        self.saveJSON({"background" : {"class" : "SlopedBackground",
+                                       "offset" : str(offset),
+                                       "sigma" : str(sigma)}})
+        self.bg_image = numpy.zeros((x_size, y_size)) + offset
+        noise = sigma * np.random.randn(x_size)
+
+        for i in range(y_size):
+            self.bg_image[:,i] += noise
+                
 class UniformBackground(Background):
 
     def __init__(self, sim_fp, x_size, y_size, h5_data, photons = 100):
