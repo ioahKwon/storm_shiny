@@ -122,7 +122,7 @@ class RandomNoiseBackground(Background):
                                        "offset" : str(offset),
                                        "sigma" : str(sigma)}})
         self.bg_image = numpy.zeros((x_size, y_size)) + offset
-        noise = sigma * np.random.randn(x_size)
+        noise = sigma * numpy.random.randn(x_size)
 
         for i in range(y_size):
             self.bg_image[:,i] += noise
